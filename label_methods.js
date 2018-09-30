@@ -133,8 +133,10 @@ function SetValue(paramValue) {
     jsonData = paramValue;
 
     var resString = paramValue.Format;
-
-    $.each(paramValue.Values, function(key, value){        
+	
+	resString = resString.replaceAll(String.raw`\\n`, '<br>');
+	
+    $.each(paramValue.Values, function(key, value){
         if (key == "RESULT") {
             resString = value;
         } else {
