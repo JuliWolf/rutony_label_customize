@@ -133,36 +133,53 @@ function SetValue(paramValue) {
     jsonData = paramValue;
 
     var resString = paramValue.Format;
-	
-	resString = resString.replaceAll(String.raw`\\n`, '<br>');
-	
-    $.each(paramValue.Values, function(key, value){
-        if (key == "RESULT") {
-            resString = value;
-        } else {
-            resString = resString.replaceAll(key, SetEffectLetters(value));
-        }
-        
-    });
 
-    $('.label').html(resString);
-    $('.letter').addClass('animated-letter').addClass(jsonStyle.EffectKeywords);
+	if (resString.startsWith('@') ) {
+		var label = $(".label");
 
-    SetStyle(jsonStyle); 
+		label.load(resString.slice(1) + ".html", 
+	    function( response, status, xhr ) {
+			if( xhr.status == 200 )
+			{
+				resString = response;
+				$.each(paramValue.Values, function(key, value){
+					resString = resString.replaceAll(key, value);
+				});
+				
+				$('.label').html(resString);
+			}
+	    });
+		
+	} else {
+		resString = resString.replaceAll(String.raw`\\n`, '<br>');
 
-    if (jsonStyle.EffectNewValueShow != "none") {
-        console.log('ani started');
-        $('.label').addClass('animated ' + jsonStyle.EffectNewValueShow + ' magictime ' + jsonStyle.EffectNewValueShow) 
-        .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+		$.each(paramValue.Values, function(key, value){
+			if (key == "RESULT") {
+				resString = value;
+			} else {
+				resString = resString.replaceAll(key, SetEffectLetters(value));
+			}
+			
+		});
+		
+		$('.label').html(resString);
+		$('.letter').addClass('animated-letter').addClass(jsonStyle.EffectKeywords);
 
-            $('.label').removeClass(function () { 
-                return $(this).attr('class').replace(/\b(?:label)\b\s*/g, ''); 
-            });
+		SetStyle(jsonStyle); 
 
-            console.log('ani finished');
-        });  
-    }
+		if (jsonStyle.EffectNewValueShow != "none") {
+			console.log('ani started');
+			$('.label').addClass('animated ' + jsonStyle.EffectNewValueShow + ' magictime ' + jsonStyle.EffectNewValueShow) 
+			.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
 
+				$('.label').removeClass(function () { 
+					return $(this).attr('class').replace(/\b(?:label)\b\s*/g, ''); 
+				});
+
+				console.log('ani finished');
+			});  
+		}
+	}
 }
 
 function GetStyle(paramStyle) {
