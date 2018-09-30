@@ -1,0 +1,20 @@
+﻿@charset "utf-8";
+html,body {
+	background-color: transparent;
+	overflow-x: hidden;		
+	overflow-y: hidden;
+	display: table;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+.LabelPosition {
+	padding: 4px;
+	text-align: center;
+	display: table-cell;
+	vertical-align: middle;
+}
+.marquee {
+	width: 100%;
+}
